@@ -3,9 +3,10 @@ var router = exprees.Router()
 var Drug = require('../models/drug')
 
 router.get('/', (req, res) => {
+    console.log('in drugs get')
     Drug.find((err, drugs) => {
         if (err) return res.json(err)
-        else return res.json(drugs)
+        else res.json(drugs)
     })
 })
 
@@ -18,7 +19,14 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
     console.log(req.body)
-    Drug.create(req.body, (err, drug) => {
+    var drugInfo = {
+        name: req.body.name,
+        generic_name: '',
+        manufacturer_name: '',
+        dosage_and_administration: [''],
+        country_of_origin: '',
+    }
+    Drug.create(drugInfo, (err, drug) => {
         if (err) return res.json(err)
         else return res.json(drug)
     })

@@ -2,7 +2,7 @@ var mongoose = require('mongoose')
 
 var drugSchema = mongoose.Schema(
     {
-        name: String,
+        name: { type: String, required: true },
         generic_name: String,
         manufacturer_name: String,
         dosage_and_administration: Array,

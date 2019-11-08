@@ -4,12 +4,13 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
+var dotenv = require('dotenv');
+
+// setup enviroment varuables
+dotenv.config();
 
 // setup database coonection
-mongoose.connect(
-  'mongodb://admin:Uf]hgvplk1@ds237588.mlab.com:37588/phone-book',
-  { useNewUrlParser: true, useUnifiedTopology: true },
-);
+mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true, useUnifiedTopology: true });
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -17,6 +18,7 @@ db.once('open', function () {
   console.log('database: counnection seccess')
 });
 
+var authRouter = require('./routes/auth');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var drugsRouter = require('./routes/drugs');
@@ -36,9 +38,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/auth', authRouter);
 app.use('/users', usersRouter);
-app.use('/drugs', drugsRouter); 
-app.use('/patients', patientsRouter); 
+app.use('/drugs', drugsRouter);
+app.use('/patients', patientsRouter);
 app.use('/prescriptions', prescriptionsRouter);
 
 // catch 404 and forward to error handler
