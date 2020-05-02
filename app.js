@@ -11,7 +11,7 @@ var dotenv = require('dotenv');
 dotenv.config();
 
 // setup database coonection
-mongoose.connect(process.env.DB_CONNECT_LOCAL, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
+mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
