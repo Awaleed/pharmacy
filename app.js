@@ -6,11 +6,12 @@ var logger = require('morgan');
 var mongoose = require('mongoose');
 var dotenv = require('dotenv');
 
+
 // setup enviroment varuables
 dotenv.config();
 
 // setup database coonection
-mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.DB_CONNECT_LOCAL, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -18,12 +19,6 @@ db.once('open', function () {
   console.log('database: counnection seccess')
 });
 
-var authRouter = require('./routes/auth');
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var drugsRouter = require('./routes/drugs');
-var patientsRouter = require('./routes/patient');
-var prescriptionsRouter = require('./routes/prescription');
 
 var app = express();
 
@@ -37,12 +32,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/auth', authRouter);
-app.use('/users', usersRouter);
-app.use('/drugs', drugsRouter);
-app.use('/patients', patientsRouter);
-app.use('/prescriptions', prescriptionsRouter);
+app.use(require('./routes/index'))
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

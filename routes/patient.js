@@ -1,10 +1,11 @@
 var express = require('express');
 var router = express.Router();
-var Patient = require('../models/patient')
+var Patient = require('../models/patient');
+var authentecate = require('../middelwares/authentecate');
 
-router.get('/', (req, res) => {
+router.get('/', authentecate, (req, res) => {
     console.log('in patient get')
-    Patient.find((err, patients) => {
+    Patient.find({user: req.user._id},(err, patients) => {
         if (err) return res.json(err)
         else res.json(patients)
     })
@@ -13,13 +14,14 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
     Patient.findById(req.params.id, (err, patient) => {
         if (err) return res.json(err)
-        else return res.json( )
+        else return res.json()
     })
 })
 
-router.post('/', (req, res) => {
-    console.log(req.body)
+router.post('/', authentecate, (req, res) => {
+    console.log(req.body);
     var patientInfo = {
+        user: req.user._id,
         name: req.body.name,
         phone_number: 0,
         location: { long: 0, lat: 0 },
